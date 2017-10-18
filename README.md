@@ -48,11 +48,25 @@ Run this script by navigating to the folder that contains it in your terminal, a
 
 This script generates a timeseries plot for each LSOA of the count of crime occurences, by crime type. The plots generated are in the 'plots' folder.
 
-As we plot a different subset of crime types for each plot (some crime types don't occur in a particular area at all in our time period), the colour assigned to a crime type line in the legend isn't consistent between plots.
+As we plot a different subset of crime types for each plot (some crime types don't occur in a particular area at all in our time period), the colour assigned to a crime type line in the legend isn't consistent between plots. Also due to the high number of series being plot in some graphs, differentiating between some crime types is hard.
 
 #### Time Series Exploratory Summary
 
-Particular areas in the City of London such as 001b, 001c, and 001e appear to have an increasing trend in the anti social behaviour crime count.
+Some example exploration where I picked a few LSOAs:
+
+Particular areas in the City of London such as 001b, 001c, and 001e appear to have an increasing trend in the anti social behaviour crime count. Depending on what is classified as anti social behaviour, this could indicate a change in environment around these areas, such as new bars opening.
+
+Some areas such as Havering, Islington 20E, 22C, 22E, Southwark 3H etc.. have only had incidents in one particular crime type over the past 3 years. For example, with Southwark 3H, all of these are anti social behaviour incidents.
+
+For Tower Hamlets 14D there is a spike of three theft incidents in one month. As there has historically been a low count (0 or 1), this introduces the possibility that the three incidents may be related.
+
+Hammersmith 1A at the start of the time series had several crime incidents. However Since 2015, there have been no reported incidents, indicating a lower crime rate, that could be the result of some unknown external factors.
+
+Particular areas in the City of London LSOAs saw an increase in the number of crimes around October 2016.
+
+Tower Hamlets 15B, 27B, Westminster, and the areas of the City of London all have the highest crime counts throughout the entire time series period. We cannot say that there are higher crime rates here as this could just be a result of higher population density in these particular areas.
+
+The remaining areas are sporadic with the number of crimes.
 
 ### setupHeatmap.py
 
