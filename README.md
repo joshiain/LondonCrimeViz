@@ -23,13 +23,13 @@ This script generates a second output file called `policeCount.json` which repre
 ```json
  {
     "LSOA name1": {
-        "crime_type_1": [count_month_1_year_1, count_ month_2_year_1, ..., count_month_12_year_3],
-        "crime_type_2": [count_month_1_year_1, count_month_2_year_2, ..., count_month_12_year_3]
+        "crime_type_1": [count\_month\_1\_year\_1, count\_ month\_2\_year\_1, \.\.\., count\_month\_12\_year_3],
+        "crime_type_2": [count\_month\_1\_year\_1, count\_month\_2\_year\_2, \.\.\., count\_month\_12\_year\_3]
         },
     "LSOA name2": {
-        "crime_type _1": [...],
-        ...
+        "crime_type _1": [\.\.\.],
+        \.\.\.
         }
-    ...
+    \.\.\.
 }
 ```
