@@ -4,7 +4,7 @@ Access the heatmap visualisation [here](https://joshiain.github.io/LondonCrimeVi
 
 Note: Only access this in Chrome for the best experience, the dropdown checkboxes are buggy in other browsers.
 
-This was written on MacOS, as a result if using another operating system, file directory and instances in the code with '/' will need to be replaced with your system equivalent.
+Be aware, this was written in MacOS, as a result if using another operating system, file directory and instances in the code with '/' will need to be replaced with your system equivalent.
 
 The data used for this is contained in the "PoliceData" folder.
 
