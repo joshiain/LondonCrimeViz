@@ -84,6 +84,8 @@ Please view the visualisation in Google Chrome.
 
 This is the interactive heatmap visualisation of the crime counts in London. The heatmap can be filtered by LSOA name, and Crime type in the dropdown checkbox filters at the top of the webapp.
 
+Click the 'Change Gradient' button to change the colour gradient of the heatmap.
+
 Note: Due to the limitations of the Google Maps API, a colour legend couldn't be generated. You may see more intense colours in areas when you filter and less crime points are plotted. This is because when filtering, the colour intensity of the heatmap is relative to counts of what is currently being displayed on the map.
 
 ### index.html
