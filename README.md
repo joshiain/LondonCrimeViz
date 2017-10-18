@@ -10,7 +10,7 @@ The data used for this is contained in the "PoliceData" folder.
 
 ## Python Scripts
 
-The python scripts are in python3. The three main python scripts `transformData.py`, `crimeTimeSeries.py`, and `setupHeatmap.py` are written so that they can be run independently without requiring any of the other scripts to be run.
+The python scripts are in python3. The three main python scripts `transformData.py`, `crimeTimeSeries.py`, and `setupHeatmap.py` are written so that they can be run independently without requiring any of them to be run before another. However the `combinedPoliceData.csv` must exist for these to work, and to obtain this csv, either download it from above or run `combineData.py`.
 
 ### helpers.py
 
@@ -20,13 +20,17 @@ It contains a function called `concatPoliceFiles` to concatenate the police data
 
 Other functions include `df_to_geojson` a function that converts a dataframe in to GeoJSON, and `crimeTimeSeries` that plots a time series of the count of crime types for a particular LSOA over the time period of the input dataframe.
 
+### combineData.py
+
+Run this script by navigating to the folder that contains it in your terminal, and executing the command `python3 combineData.py`.
+
+This python script generates an output csv with all of the csv's inside the PoliceData folder concatenated in a new file called `combinedPoliceData.csv`. This csv contains ALL records in the police crime data, including those with missing values for LSOAs and Latitude and Longitudes. It is important the folders within "PoliceData" follow the 'YYYY-MM' name format.
+
 ### transformData.py
 
 Run this script by navigating to the folder that contains it in your terminal, and executing the command `python3 transformData.py`.
 
-This python script generates an output csv with all of the csv's inside the PoliceData folder concatenated in a new file called `combinedPoliceData.csv`. This csv contains ALL records in the police crime data, including those with missing values for LSOAs and Latitude and Longitudes. It is important the folders within "PoliceData" follow the 'YYYY-MM' name format.
-
-This script generates a second output file called `policeCount.json` which represents the concatenated police crime data as a JSON time series in the form:
+This script generates a output file called `policeCount.json` which represents the concatenated police crime data as a JSON time series in the form:
 
 ```json
  {

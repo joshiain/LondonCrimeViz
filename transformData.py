@@ -4,8 +4,7 @@ import json
 from collections import defaultdict
 
 
-concatPolData = helpers.concatPoliceFiles()            
-concatPolData.to_csv('combinedPoliceData.csv')
+concatPolData = pd.read_csv('combinedPoliceData.csv')            
 
 # Remove rows which do not have an LSOA
 concatPolData = concatPolData[concatPolData["LSOA name"].notnull()]

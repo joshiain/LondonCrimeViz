@@ -2,7 +2,7 @@ import helpers
 import pandas as pd
 
 
-concatPolData = helpers.concatPoliceFiles()            
+concatPolData = pd.read_csv('combinedPoliceData.csv')            
 
 # Remove rows which do not have an LSOA
 concatPolData = concatPolData[concatPolData["LSOA name"].notnull()]
