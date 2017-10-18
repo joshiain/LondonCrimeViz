@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Crime Heatmap</title>
+    <style>
+
+        #map {
+            height: 100%;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #filter-panel {
+        position: absolute;
+        top: 10px;
+        left: 50%;
+        z-index: 5;
+        padding: 5px;
+        text-align: center;
+        font-family: 'Trebuchet MS', 'Helvetica', 'sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+        transform: translate(-50%, 0%);
+      }
+
+    </style>
+</head>
+
+<body>
+    <div id="filter-panel">
+        <select id="lsoa-select" multiple="multiple"  class="lsoa-select">
+       </select>
+        <select id="crime-select" multiple="multiple" class="crime-select">
+       </select>
+    </div>
+    <div id="map"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/HemantNegi/jquery.sumoselect/master/jquery.sumoselect.min.js"></script>
+    <link href="https://cdn.rawgit.com/HemantNegi/jquery.sumoselect/master/sumoselect.css" rel="stylesheet" />
+    <script>
+        var map, geoJSON, heatmap, heatmapData, crimeFilt, lsoaFilt;
+        
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: {
+                    lat: 51.512344,
+                    lng: -0.090985
+                },
+                mapTypeId: 'roadmap'
+
+            });
+            
+            var script = document.createElement('script');
+
+            //map.data.loadGeoJson('policeGeoJSON.json');
+
+            script.src = 'https://rawgit.com/joshiain/CrimeWebViz/master/policeGeoJSON.js';
+            document.getElementsByTagName('head')[0].appendChild(script);
+
+            var crimeTypes = ['Bicycle theft', 'Criminal damage and arson', 'Other theft', 'Violence and sexual offences', 'Anti-social behaviour', 'Burglary', 'Robbery', 'Shoplifting', 'Theft from the person', 'Vehicle crime', 'Drugs', 'Other crime', 'Possession of weapons', 'Public order'];
+            var LSOAs = ['Camden 027B', 'Camden 027C', 'Camden 028B', 'Castle Point 011D', 'City of London 001A', 'City of London 001B', 'City of London 001C', 'City of London 001E', 'City of London 001F', 'City of London 001G', 'Hackney 027G', 'Hammersmith and Fulham 001A', 'Havering 029B', 'Islington 020E', 'Islington 022C', 'Islington 022E', 'Islington 022F', 'Islington 022H', 'Islington 023D', 'Islington 023E', 'Kensington and Chelsea 006B', 'Southwark 002C', 'Southwark 003A', 'Southwark 003E', 'Southwark 003H', 'Thurrock 005C', 'Tower Hamlets 014D', 'Tower Hamlets 015A', 'Tower Hamlets 015B', 'Tower Hamlets 015E', 'Tower Hamlets 020D', 'Tower Hamlets 021F', 'Tower Hamlets 025C', 'Tower Hamlets 027B', 'Westminster 018B'];
+
+            crimeFilt = crimeTypes;
+            lsoaFilt = LSOAs;
+
+            $(document).ready(function() {
+                $('.lsoa-select').SumoSelect({
+                    placeholder: 'LSOA Name',
+                    okCancelInMulti: true,
+                    selectAll: true
+                });
+                LSOAs.forEach(function(entry) {
+                    $('.lsoa-select')[0].sumo.add(entry);
+                });
+                $('.lsoa-select')[0].sumo.selectAll();
+            
+                $('.btnOk').on('click', function() {
+                    
+                    lsoaFilt = []
+                    $('.lsoa-select option:selected').each(function(i) {
+                        lsoaFilt.push($(this).val());
+                        
+                    });
+
+                    filterData();
+                });
+            });
+
+            $(document).ready(function() {
+                $('.crime-select').SumoSelect({
+                    placeholder: 'Crime Type',
+                    okCancelInMulti: true,
+                    selectAll: true
+                });
+                crimeTypes.forEach(function(entry) {
+                    $('.crime-select')[0].sumo.add(entry);
+                });
+                $('.crime-select')[0].sumo.selectAll();
+                $('.btnOk').on('click', function() {
+                    
+                    crimeFilt = []
+                    $('.crime-select option:selected').each(function(i) {
+                        crimeFilt.push($(this).val());
+                        
+                    });
+                    console.log(crimeFilt);
+
+                    filterData();
+                });
+            });
+
+        }
+
+        function filterData() {
+            
+            heatmapData = new google.maps.MVCArray();;
+            for (var i = 0; i < geoJSON.features.length; i++) {
+                var coords = geoJSON.features[i].geometry.coordinates;
+                var latLng = new google.maps.LatLng(coords[1], coords[0]);
+                var currentLSOA = geoJSON.features[i].properties.LSOAname;
+                var currentCrime = geoJSON.features[i].properties.Crimetype;
+                
+                if ((lsoaFilt.indexOf(currentLSOA) >= 0) && (crimeFilt.indexOf(currentCrime) >= 0)) {
+                    if (!isNaN(coords[1]) && !isNaN(coords[0])) {
+                        heatmapData.push(latLng);
+                    }
+                }
+                
+            }
+
+            heatmap.set('data', heatmapData);
+        }
+
+
+        function crime_callback(results) {
+            geoJSON = results;
+            heatmapData = new google.maps.MVCArray();
+            for (var i = 0; i < results.features.length; i++) {
+                var coords = results.features[i].geometry.coordinates;
+                var latLng = new google.maps.LatLng(coords[1], coords[0]);
+
+                if (!isNaN(coords[1]) && !isNaN(coords[0])) {
+                    heatmapData.push(latLng);
+                }
+
+            }
+            heatmap = new google.maps.visualization.HeatmapLayer({
+                data: heatmapData,
+                map: map,
+                opacity: 0.8,
+                radius: 20,
+                gradient: [
+                    'rgba(0, 255, 255, 0)',
+                    'rgba(0, 255, 255, 1)',
+                    'rgba(0, 191, 255, 1)',
+                    'rgba(0, 127, 255, 1)',
+                    'rgba(0, 63, 255, 1)',
+                    'rgba(0, 0, 255, 1)',
+                    'rgba(0, 0, 223, 1)',
+                    'rgba(0, 0, 191, 1)',
+                    'rgba(0, 0, 159, 1)',
+                    'rgba(0, 0, 127, 1)',
+                    'rgba(63, 0, 91, 1)',
+                    'rgba(127, 0, 63, 1)',
+                    'rgba(191, 0, 31, 1)',
+                    'rgba(255, 0, 0, 1)'
+                ]
+            });
+
+        }
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCYsCZILD00g0cN_ExtHWyLiZM9R4SiCPc&libraries=visualization&callback=initMap">
+    </script>
+</body>
+
+</html>

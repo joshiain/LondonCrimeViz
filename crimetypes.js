@@ -1,0 +1,1 @@
+var crimeTypes = ["Other theft", "Vehicle crime", "Anti-social behaviour", "Criminal damage and arson", "Drugs", "Public order", "Bicycle theft", "Shoplifting", "Theft from the person", "Violence and sexual offences", "Burglary", "Possession of weapons", "Other crime", "Robbery"];
