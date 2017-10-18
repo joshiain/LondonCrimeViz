@@ -24,7 +24,7 @@ Other functions include `df_to_geojson` a function that converts a dataframe in 
 
 Run this script by navigating to the folder that contains it in your terminal, and executing the command `python3 transformData.py`.
 
-This python script generates an output csv with all of the csv's inside the PoliceData folder concatenated in a new file called `combinedPoliceData.csv`. It is important the folders within "PoliceData" follow the 'YYYY-MM' name format.
+This python script generates an output csv with all of the csv's inside the PoliceData folder concatenated in a new file called `combinedPoliceData.csv`. This csv contains ALL records in the police crime data, including those with missing values for LSOAs and Latitude and Longitudes. It is important the folders within "PoliceData" follow the 'YYYY-MM' name format.
 
 This script generates a second output file called `policeCount.json` which represents the concatenated police crime data as a JSON time series in the form:
 
