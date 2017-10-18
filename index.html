@@ -56,32 +56,38 @@
             });
             
             var script = document.createElement('script');
-
-            //map.data.loadGeoJson('policeGeoJSON.json');
-
+            // run polceGeoJSON javascript 
             script.src = 'https://rawgit.com/joshiain/LondonCrimeViz/master/policeGeoJSON.js';
             document.getElementsByTagName('head')[0].appendChild(script);
 
+            // initialise crime types and LSOAs from python javascript output
             var crimeTypes = ['Bicycle theft', 'Criminal damage and arson', 'Other theft', 'Violence and sexual offences', 'Anti-social behaviour', 'Burglary', 'Robbery', 'Shoplifting', 'Theft from the person', 'Vehicle crime', 'Drugs', 'Other crime', 'Possession of weapons', 'Public order'];
+
             var LSOAs = ['Camden 027B', 'Camden 027C', 'Camden 028B', 'Castle Point 011D', 'City of London 001A', 'City of London 001B', 'City of London 001C', 'City of London 001E', 'City of London 001F', 'City of London 001G', 'Hackney 027G', 'Hammersmith and Fulham 001A', 'Havering 029B', 'Islington 020E', 'Islington 022C', 'Islington 022E', 'Islington 022F', 'Islington 022H', 'Islington 023D', 'Islington 023E', 'Kensington and Chelsea 006B', 'Southwark 002C', 'Southwark 003A', 'Southwark 003E', 'Southwark 003H', 'Thurrock 005C', 'Tower Hamlets 014D', 'Tower Hamlets 015A', 'Tower Hamlets 015B', 'Tower Hamlets 015E', 'Tower Hamlets 020D', 'Tower Hamlets 021F', 'Tower Hamlets 025C', 'Tower Hamlets 027B', 'Westminster 018B'];
 
             crimeFilt = crimeTypes;
             lsoaFilt = LSOAs;
 
+            // Add dropdown checkboxes for LSOAs using sumoselect
             $(document).ready(function() {
                 $('.lsoa-select').SumoSelect({
                     placeholder: 'LSOA Name',
                     okCancelInMulti: true,
                     selectAll: true
                 });
+
+                //Automatically load LSOA names in to dropdown
                 LSOAs.forEach(function(entry) {
                     $('.lsoa-select')[0].sumo.add(entry);
                 });
+
                 $('.lsoa-select')[0].sumo.selectAll();
             
+                // Function for when filtering 'OK' button is clicked in dropdown
                 $('.btnOk').on('click', function() {
                     
                     lsoaFilt = []
+                    // store selected LSOAs in a global array
                     $('.lsoa-select option:selected').each(function(i) {
                         lsoaFilt.push($(this).val());
                         
@@ -91,19 +97,26 @@
                 });
             });
 
+            // Add dropdown checkboxes for Crime types using sumoselect
             $(document).ready(function() {
                 $('.crime-select').SumoSelect({
                     placeholder: 'Crime Type',
                     okCancelInMulti: true,
                     selectAll: true
                 });
+
+                //Automatically load crime types in to dropdown
                 crimeTypes.forEach(function(entry) {
                     $('.crime-select')[0].sumo.add(entry);
                 });
+
                 $('.crime-select')[0].sumo.selectAll();
+
+                // Function for when filtering 'OK' button is clicked in dropdown
                 $('.btnOk').on('click', function() {
                     
                     crimeFilt = []
+                    // store selected crime types in a global array
                     $('.crime-select option:selected').each(function(i) {
                         crimeFilt.push($(this).val());
                         
@@ -117,7 +130,7 @@
         }
 
         function filterData() {
-            
+            // function to filter the GeoJSON data based on the checkbox selections
             heatmapData = new google.maps.MVCArray();;
             for (var i = 0; i < geoJSON.features.length; i++) {
                 var coords = geoJSON.features[i].geometry.coordinates;
@@ -133,6 +146,7 @@
                 
             }
 
+            // Change reset the data associated with the heatmap layer
             heatmap.set('data', heatmapData);
         }
 
@@ -140,6 +154,8 @@
         function crime_callback(results) {
             geoJSON = results;
             heatmapData = new google.maps.MVCArray();
+
+            // Store lat longs in an array
             for (var i = 0; i < results.features.length; i++) {
                 var coords = results.features[i].geometry.coordinates;
                 var latLng = new google.maps.LatLng(coords[1], coords[0]);
@@ -149,6 +165,8 @@
                 }
 
             }
+
+            // generate a new heatmap layer with a custom gradient.
             heatmap = new google.maps.visualization.HeatmapLayer({
                 data: heatmapData,
                 map: map,
