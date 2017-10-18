@@ -48,9 +48,11 @@ Run this script by navigating to the folder that contains it in your terminal, a
 
 This script generates a timeseries plot for each LSOA of the count of crime occurences, by crime type. The plots generated are in the 'plots' folder.
 
+As we plot a different subset of crime types for each plot (some crime types don't occur in a particular area at all in our time period), the colour assigned to a crime type line in the legend isn't consistent between plots.
+
 #### Time Series Exploratory Summary
 
-Summarise...
+Particular areas in the City of London such as 001b, 001c, and 001e appear to have an increasing trend in the anti social behaviour crime count.
 
 ### setupHeatmap.py
 

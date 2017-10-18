@@ -33,11 +33,15 @@ def df_to_geojson(df, parameters, lat='Latitude', lon='Longitude'):
 
 def crimeTimeSeries(df,LSOA):
     # plot a time series and save in plots folder _ = is to supress the output in my console
+    currentCrimes = df[df["LSOA name"]==LSOA].groupby('Crime type')['Crime type']
+    numColours = len(currentCrimes)
+    cm = plt.get_cmap('gist_rainbow')
     fig, ax = plt.subplots(1,1)
     _ = ax.set_title(LSOA)
     _ = ax.set_ylabel('Date')
     _ = ax.set_ylabel('Crime Count')
+    _ = ax.set_prop_cycle('color',[cm(1.*i/numColours) for i in range(numColours)])
     _ = df[df["LSOA name"]==LSOA].groupby("Crime type").plot(x='Date', y='Count', ax=ax);
-    _ = plt.legend([v[0] for v in df[df["LSOA name"]==LSOA].groupby('Crime type')['Crime type']], bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    _ = plt.legend([v[0] for v in currentCrimes], bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.savefig('plots/'+LSOA+'_time_series.pdf',bbox_inches='tight')
     plt.close()
